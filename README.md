@@ -1,4 +1,4 @@
-# 💙 HaruIsm Project 
+# 💙 HaruIsm Project
 
 # 🥞 Promblem
 ![image](https://github.com/lala-david/HaruIsm/assets/37481441/3a3823f2-0064-425b-803b-ef56e15192a2)
@@ -22,6 +22,10 @@
 </br>
 # 🐳 Lean Canvas 
 ![image](https://github.com/lala-david/HaruIsm/assets/37481441/3b3db46b-7c5f-4511-b4d1-c4730e2d7158)
+<br>
+</br>
+# 👑 TAM SAM SOM 
+![image](https://github.com/lala-david/HaruIsm/assets/37481441/fbb7df3c-420d-4feb-a63d-4b1c07bddcfb)
 <br>
 </br>
 # 🦀 Benefit
