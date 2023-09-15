@@ -7,6 +7,7 @@ import {
   Image,
   TouchableOpacity,
   DeviceEventEmitter,
+  ImageBackground,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {RootStackParamList} from '../../types/types';
@@ -100,10 +101,14 @@ const Gallery: React.FC<GalleryProps> = ({route}) => {
         {images.map(image => (
           <View key={image.id} style={styles.imageWrapper}>
             <TouchableOpacity onPress={() => handleClick(image)}>
-              <Image
-                source={{uri: `data:image/png;base64,${image.data}`}}
-                style={styles.image}
-              />
+              <ImageBackground
+                source={require('../../assets/img/film.png')}
+                style={styles.imageContainer}>
+                <Image
+                  source={{uri: `data:image/png;base64,${image.data}`}}
+                  style={styles.image}
+                />
+              </ImageBackground>
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.deleteButton}
@@ -130,15 +135,24 @@ const styles = StyleSheet.create({
     top: 10,
     marginBottom: 30,
     color: 'black',
+    fontWeight: 'bold',
   },
   imageScroll: {
     paddingHorizontal: 8,
   },
-  image: {
-    width: 200,
-    height: 200,
+  imageContainer: {
+    width: 250,
+    height: 240,
     resizeMode: 'contain',
-    marginVertical: 8,
+  },
+  image: {
+    top: 10,
+    width: 190,
+    left: 30,
+    height: 190,
+    resizeMode: 'contain',
+    marginVertical: 10,
+    borderRadius: 20,
   },
   deleteButton: {
     position: 'absolute',

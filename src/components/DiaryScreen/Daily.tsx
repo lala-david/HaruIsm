@@ -10,7 +10,6 @@ import {
   ScrollView,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import DateTimePicker from '@react-native-community/datetimepicker';
 import {RootStackParamList} from '../../types/types';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {RouteProp} from '@react-navigation/native';
@@ -32,7 +31,6 @@ const Daily: React.FC<DailyProps> = ({navigation, route}) => {
   const [contentText, setContentText] = useState('');
   const [titleText, setTitleText] = useState(''); // 제목 추가
   const [date, setDate] = useState(new Date());
-  const [showDatePicker, setShowDatePicker] = useState(false);
 
   const handleOpenGallery = () => {
     const selectedDateTag = `${date.getFullYear()}-${
@@ -80,14 +78,6 @@ const Daily: React.FC<DailyProps> = ({navigation, route}) => {
     loadStoredData();
   }, [loadStoredData]);
 
-  const onChangeDate = async (event: any, selectedDate?: Date) => {
-    setShowDatePicker(false);
-    if (selectedDate) {
-      await handleSave();
-      setDate(selectedDate);
-    }
-  };
-
   const handleSave = async () => {
     try {
       const dateString = `${date.getFullYear()}-${String(
@@ -128,22 +118,9 @@ const Daily: React.FC<DailyProps> = ({navigation, route}) => {
     return unsavedImages;
   };
 
-  const deleteDiary = async () => {
-    try {
-      const dateString = `${date.getFullYear()}-${String(
-        date.getMonth() + 1,
-      ).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
-      await AsyncStorage.removeItem(dateString);
-      await loadStoredData();
-      console.log('Diary deleted');
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
   const handleDrawEmotion = async () => {
     const unsavedImages = await loadImages();
-    if (unsavedImages.length >= 20) {
+    if (unsavedImages.length >= 50) {
       Alert.alert(
         '그림 생성 횟수 초과',
         '당일 그림은 더 이상 생성할 수 없습니다.',
@@ -184,54 +161,48 @@ const Daily: React.FC<DailyProps> = ({navigation, route}) => {
     <ScrollView style={styles.main} contentContainerStyle={{paddingBottom: 70}}>
       <View style={styles.container}>
         <Text style={styles.title}>
-          📖 오늘의 하루를 한줄의 일기로 작성해 봐요!
+          {date.getFullYear()}년 {String(date.getMonth() + 1).padStart(2, '0')}
+          월{String(date.getDate()).padStart(2, '0')}일
         </Text>
-        <View style={styles.box1}>
-          <TouchableOpacity
-            style={styles.selectdate}
-            onPress={() => setShowDatePicker(true)}>
-            <Text style={styles.ttp}>
-              {`${String(date.getMonth() + 1).padStart(2, '0')}월 ${String(
-                date.getDate(),
-              ).padStart(2, '0')}일`}
-            </Text>
-            <TouchableOpacity style={styles.deleteButton} onPress={deleteDiary}>
-              <Text style={styles.deleteButtonText}> x </Text>
-            </TouchableOpacity>
-          </TouchableOpacity>
-          {showDatePicker && (
-            <DateTimePicker
-              value={date}
-              mode="date"
-              display="default"
-              onChange={onChangeDate}
-              maximumDate={new Date()}
-            />
-          )}
+        <View style={styles.box1}></View>
+
+        <View style={styles.bubble}>
+          <TextInput
+            style={[styles.titleInput, {backgroundColor: '#9cd6e5'}]}
+            onChangeText={setTitleText}
+            value={titleText}
+            maxLength={50}
+            placeholder="제목을 입력해주세요."
+            placeholderTextColor="white"
+          />
+          <View style={styles.arrowContainer}>
+            <View style={styles.arrowLeft} />
+          </View>
         </View>
-        <TextInput
-          style={styles.titleInput}
-          onChangeText={setTitleText}
-          value={titleText}
-          maxLength={50}
-          placeholder="제목을 입력해주세요"
-        />
-        <TextInput
-          style={styles.input}
-          onChangeText={setContentText}
-          value={contentText}
-          maxLength={80}
-          multiline={true}
-        />
+
+        <View style={styles.bubble}>
+          <TextInput
+            style={[styles.input, {backgroundColor: '#F4F4F4'}]}
+            onChangeText={setContentText}
+            value={contentText}
+            maxLength={80}
+            multiline={true}
+            placeholder="내용을 입력하세요."
+            placeholderTextColor="gray"
+          />
+          <View style={styles.arrowContainer}>
+            <View style={styles.arrowRight} />
+          </View>
+        </View>
         <TouchableOpacity
           style={styles.emotionButton}
           onPress={handleDrawEmotion}>
-          <Text style={{fontWeight: 'bold', color: 'white'}}>그림 생성</Text>
+          <Text style={styles.buttontea}>그림 생성</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.galleryButton}
           onPress={handleOpenGallery}>
-          <Text style={{fontWeight: 'bold', color: 'white'}}>갤러리</Text>
+          <Text style={styles.buttontea}>갤러리</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>
@@ -245,11 +216,12 @@ const styles = StyleSheet.create({
     paddingTop: 40,
   },
   title: {
-    fontSize: 18,
+    fontSize: 24,
     fontWeight: 'bold',
     bottom: 0,
-    left: 16,
+    left: 0,
     color: 'black',
+    textAlign: 'center',
   },
   ttp: {
     color: 'white',
@@ -276,25 +248,30 @@ const styles = StyleSheet.create({
   },
   emotionButton: {
     backgroundColor: '#9cd6e5',
-    paddingVertical: 13,
-    paddingHorizontal: 70,
+    paddingVertical: 8,
+    paddingHorizontal: 20,
     borderRadius: 105,
     marginBottom: 10,
-    top: 5,
-    left: 85,
-    width: 200,
+    top: 88,
+    left: 40,
+    width: 120,
     alignItems: 'center',
   },
   galleryButton: {
     backgroundColor: '#9cd6e5',
-    paddingVertical: 13,
-    paddingHorizontal: 70,
+    paddingVertical: 8,
+    paddingHorizontal: 20,
     borderRadius: 105,
     marginBottom: 10,
-    top: 7,
-    left: 85,
-    width: 200,
+    top: 42,
+    left: 200,
+    width: 120,
     alignItems: 'center',
+  },
+  buttontea: {
+    fontWeight: 'bold',
+    color: 'white',
+    fontSize: 15,
   },
   dateText: {
     fontSize: 20,
@@ -303,82 +280,61 @@ const styles = StyleSheet.create({
     left: 5,
     bottom: 10,
   },
+  bubble: {
+    backgroundColor: 'transparent',
+    width: '80%',
+    alignSelf: 'center',
+  },
   titleInput: {
-    height: 40,
-    borderColor: 'gray',
+    height: 50,
+    width: 225,
+    fontSize: 17,
+    borderColor: 'white',
+    fontWeight: 'bold',
     borderWidth: 1,
     marginBottom: 8,
-    marginTop: 20,
+    color: 'white',
+    marginTop: 15,
+    paddingHorizontal: 30,
+    borderRadius: 105,
+  },
+  arrowContainer: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    marginLeft: 15,
+  },
+  arrowLeft: {
+    top: -10,
+    marginTop: -10,
+    width: 15,
+    height: 15,
+    backgroundColor: '#9cd6e5',
+    transform: [{rotate: '45deg'}],
   },
   input: {
-    height: 180,
-    borderColor: 'gray',
+    height: 286,
+    width: 264,
+    top: 25,
+    right: 38,
+    fontSize: 16,
+    fontWeight: 'bold',
+    borderColor: 'white',
     borderWidth: 1,
+    color: 'gray',
+    paddingHorizontal: 20,
+    marginLeft: 82,
     textAlignVertical: 'top',
     marginBottom: 16,
+    borderRadius: 16,
   },
-
-  addButton1: {
-    backgroundColor: '#9cd6e5',
-    paddingVertical: 10,
-    paddingHorizontal: 23,
-    borderRadius: 105,
-    marginBottom: 10,
-    top: 40,
-    left: 20,
-    width: 330,
-  },
-  addButtonText1: {
-    borderRadius: 50,
-    fontWeight: 'bold',
-    fontSize: 16,
-    color: 'white',
-    textAlign: 'center',
-  },
-  addButton2: {
-    backgroundColor: '#9cd6e5',
-    paddingVertical: 10,
-    paddingHorizontal: 23,
-    borderRadius: 105,
-    marginBottom: 10,
-    top: 50,
-    left: 20,
-    width: 330,
-  },
-  addButtonText2: {
-    borderRadius: 50,
-    fontWeight: 'bold',
-    fontSize: 16,
-    color: 'white',
-    textAlign: 'center',
-  },
-  addButton3: {
-    backgroundColor: '#9cd6e5',
-    paddingVertical: 10,
-    paddingHorizontal: 23,
-    borderRadius: 105,
-    marginBottom: 10,
-    top: 60,
-    left: 20,
-    width: 330,
-  },
-  addButtonText3: {
-    borderRadius: 50,
-    fontWeight: 'bold',
-    fontSize: 16,
-    color: 'white',
-    textAlign: 'center',
-  },
-  deleteButton: {
-    position: 'absolute',
-    top: 2,
-    left: 350,
-  },
-  deleteButtonText: {
-    backgroundColor: '#9cd6e5',
-    fontSize: 26,
-    fontWeight: 'bold',
-    color: 'white',
+  arrowRight: {
+    marginTop: -10,
+    width: 25,
+    height: 25,
+    left: 260,
+    top: 0,
+    backgroundColor: '#F4F4F4',
+    transform: [{rotate: '45deg'}],
   },
 });
 

@@ -61,16 +61,10 @@ const GeneratedImage: React.FC<GeneratedImageProps> = ({route, navigation}) => {
       />
       <View style={styles.buttonsContainer}>
         <TouchableOpacity onPress={handleShare} style={styles.button1}>
-          <Image
-            source={require('../../assets/img/ad1.png')}
-            style={styles.buttonImage}
-          />
+          <Text style={styles.buttonText}>공유</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={handleSave} style={styles.button2}>
-          <Image
-            source={require('../../assets/img/ad2.png')}
-            style={styles.buttonImage}
-          />
+          <Text style={styles.buttonText}>완료</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -106,16 +100,31 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
   button1: {
-    left: 60,
+    backgroundColor: '#9cd6e5',
+    paddingVertical: 10,
+    paddingHorizontal: 30,
+    borderRadius: 105,
+    marginBottom: 10,
+    top: 0,
+    left: 38,
+    width: 120,
+    alignItems: 'center',
   },
   button2: {
-    right: 60,
+    backgroundColor: '#9cd6e5',
+    paddingVertical: 10,
+    paddingHorizontal: 30,
+    borderRadius: 105,
+    marginBottom: 10,
+    top: 0,
+    right: 40,
+    width: 120,
+    alignItems: 'center',
   },
-
-  buttonImage: {
-    width: 115,
-    height: 80,
-    resizeMode: 'contain',
+  buttonText: {
+    fontWeight: 'bold',
+    color: 'white',
+    fontSize: 18,
   },
 });
 
