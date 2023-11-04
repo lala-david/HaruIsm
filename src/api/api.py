@@ -6,8 +6,8 @@ from PIL import Image
 import base64
 
 def translate_text(text, source, target):
-    client_id = 'LJDuRB1o8hHIzMEr_Glu'
-    client_secret = 'qisAoI6__n'
+    client_id = ''
+    client_secret = ''
     encText = urllib.parse.quote(text)
     data = f'source={source}&target={target}&text={encText}'
     url = 'https://openapi.naver.com/v1/papago/n2mt'
@@ -27,7 +27,7 @@ def translate_text(text, source, target):
 app = Flask(__name__)
 
 
-REST_API_KEY = '00be67ad9e90ef6a8b6281bf317244dd'
+REST_API_KEY = ''
 
 def t2i(prompts):
 
