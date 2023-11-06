@@ -25,6 +25,7 @@ type DailyProps = {
   route: RouteProp<RootStackParamList, 'Daily'>;
 };
 
+// 10.0.2.2:3000
 const API_SERVER_URL = 'http://10.0.2.2:3000';
 
 const Daily: React.FC<DailyProps> = ({navigation, route}) => {
