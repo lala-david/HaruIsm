@@ -14,7 +14,6 @@ export default function Home() {
   const [password, setPassword] = useState('');
   const [isLogin, setIsLogin] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-
   const opacity1 = new Animated.Value(1);
   const opacity2 = new Animated.Value(1);
   const opacity3 = new Animated.Value(1);
@@ -200,7 +199,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 20,
+    padding: 21,
   },
   title: {
     top: 80,
